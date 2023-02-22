@@ -279,6 +279,7 @@ subprojects { subproj ->
         return
     }
 
+    apply plugin: 'checkstyle'
     apply plugin: 'java'
     apply plugin: 'jacoco'
     apply plugin: 'com.github.spotbugs'
@@ -295,6 +296,18 @@ subprojects { subproj ->
         maven {
             url 'https://airbyte.mycloudrepo.io/public/repositories/airbyte-public-jars/'
         }
+    }
+
+    checkstyle {
+        configFile = rootProject.file('tools/gradle/checkstyle/checkstyle.xml')
+        ignoreFailures = false
+        showViolations = true
+        toolVersion = '10.0'
+    }
+
+    tasks.withType(Checkstyle) {
+        exclude '**/generated/**'
+        exclude '**/jooq/**'
     }
 
     pmd {
